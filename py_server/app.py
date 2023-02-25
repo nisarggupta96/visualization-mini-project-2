@@ -47,6 +47,11 @@ res = pca_model.fit_transform(df_scaled[numeric_columns])
 
 # Scree Plot data
 variance_ratio = list(pca_model.explained_variance_ratio_)
+cumulative_variance_ratio = list(np.cumsum(variance_ratio))
+scree_plot_data = {
+    'variance_ratio': variance_ratio,
+    'cumulative_variance_ratio': cumulative_variance_ratio
+}
 
 # Bi-plot data
 bi_plot_points = [[point[0], point[1]] for point in res]
@@ -62,7 +67,7 @@ bi_plot_data = {
 app = Flask(__name__)
 @app.get("/get_scree_data")
 def get_scree_data():
-    return variance_ratio
+    return scree_plot_data
 
 @app.get("/get_bi_plot_data")
 def get_bi_plot_data():

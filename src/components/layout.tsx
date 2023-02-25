@@ -12,7 +12,7 @@ import {
 
 const Links = [
     { linkName: 'Scree Plot', linkHref: '/scree-plot' },
-    { linkName: 'Bi-Plo', linkHref: '/bi-plot' },
+    { linkName: 'Bi-Plot', linkHref: '/bi-plot' },
     { linkName: 'Feature Table', linkHref: '/feature-table' },
     { linkName: 'Scatter Plot', linkHref: '/scatter-plot' },
     { linkName: 'Clustering', linkHref: '/clustering' }
