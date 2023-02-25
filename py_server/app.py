@@ -54,12 +54,14 @@ scree_plot_data = {
 }
 
 # Bi-plot data
-bi_plot_points = [[point[0], point[1]] for point in res]
-bi_plot_pca_components = np.transpose(pca_model.components_[0:2, :])
+bi_plot_points = [[point[0], point[1]] for point in res.tolist()]
+bi_plot_pca_components = np.transpose(pca_model.components_[0:2, :]).tolist()
+bi_plot_columns = numeric_columns.copy()
 
 bi_plot_data = {
     'bi_plot_points': bi_plot_points,
-    'bi_plot_pca_components': bi_plot_pca_components
+    'bi_plot_pca_components': bi_plot_pca_components,
+    'bi_plot_columns': bi_plot_columns
 }
 
 #####################################################################################

@@ -29,7 +29,7 @@ export default function ScreePlot({ variance_ratio, cumulative_variance_ratio }:
 
     const allShapes = variance_ratio.map((d, i) => {
         return (
-            <g key={i}>
+            <g key={i} shapeRendering={"crispEdges"}>
                 <rect
                     x={xScale(i + 1)}
                     y={yScale(d)}
@@ -59,6 +59,7 @@ export default function ScreePlot({ variance_ratio, cumulative_variance_ratio }:
     useEffect(() => {
         const svgElement = d3.select(axisRef.current);
 
+        // Add X and Y Axis through d3
         const xAxisGenerator = d3.axisBottom(xScale);
 
         svgElement
@@ -66,6 +67,7 @@ export default function ScreePlot({ variance_ratio, cumulative_variance_ratio }:
             .attr("transform", `translate(${MARGIN.left}, ${height - MARGIN.bottom})`)
             .attr("color", COLORS.BORDER_COLOR)
             .style("font-size", FONT_SIZE.MEDIUM)
+            .attr("shape-rendering", "crispEdges")
             .call(xAxisGenerator);
 
         const yAxisGenerator = d3.axisLeft(yScale);
@@ -75,8 +77,10 @@ export default function ScreePlot({ variance_ratio, cumulative_variance_ratio }:
             .attr("transform", `translate(${MARGIN.left + 1}, ${MARGIN.top})`)
             .attr("color", COLORS.BORDER_COLOR)
             .style("font-size", FONT_SIZE.MEDIUM)
+            .attr("shape-rendering", "crispEdges")
             .call(yAxisGenerator);
 
+        // Add the line plot for cumulative variance ratio
         const line = d3.line()
             .defined((i: Number) => cumulative_variance_ratio)
             .x((d: Number, i: Number) => xScale(+i + 1))
@@ -89,6 +93,7 @@ export default function ScreePlot({ variance_ratio, cumulative_variance_ratio }:
             .attr("transform", `translate(${MARGIN.left + xScale.bandwidth() / 2}, ${MARGIN.top})`)
             .attr("d", line(cumulative_variance_ratio))
 
+        // Add markers for the line points
         svgElement.selectAll("myCircles")
             .data(cumulative_variance_ratio)
             .enter()
@@ -112,6 +117,7 @@ export default function ScreePlot({ variance_ratio, cumulative_variance_ratio }:
                     width={boundsWidth}
                     height={boundsHeight}
                     transform={`translate(${[MARGIN.left, MARGIN.top].join(",")})`}
+                    shapeRendering={"crispEdges"}
                 >
                     {allShapes}
                 </g>
@@ -119,7 +125,7 @@ export default function ScreePlot({ variance_ratio, cumulative_variance_ratio }:
                     x={width + 3 * MARGIN.right}
                     y={height - 1 * MARGIN.bottom}
                     textAnchor="end"
-                    stroke={COLORS.BORDER_COLOR}
+                    stroke={COLORS.TEXT_COLOR}
                     alignmentBaseline="central"
                     fontSize={FONT_SIZE.MEDIUM}
                 >
@@ -129,7 +135,7 @@ export default function ScreePlot({ variance_ratio, cumulative_variance_ratio }:
                     x={-height / 3}
                     y={MARGIN.left / 2}
                     textAnchor="end"
-                    stroke={COLORS.BORDER_COLOR}
+                    stroke={COLORS.TEXT_COLOR}
                     alignmentBaseline="central"
                     fontSize={FONT_SIZE.MEDIUM}
                     transform="rotate(-90)"
@@ -140,6 +146,7 @@ export default function ScreePlot({ variance_ratio, cumulative_variance_ratio }:
                     x={width}
                     y={25}
                     textAnchor="end"
+                    fill={COLORS.LINE_COLOR}
                     stroke={COLORS.LINE_COLOR}
                     alignmentBaseline="central"
                     fontSize={FONT_SIZE.MEDIUM}
