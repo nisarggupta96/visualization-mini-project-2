@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
 
 #####################################################################################
 # Read data from CSV
@@ -29,20 +30,16 @@ df_cleaned['max_power'] = df_cleaned['max_power'].astype('float')
 df_cleaned['mileage'] = df_cleaned['mileage'].apply(lambda x: '0' + x.replace(' kmpl', '').replace(' km/kg', ''))
 df_cleaned['mileage'] = df_cleaned['mileage'].astype('float')
 
-# 4. Target variable transformation (Continuous to Categorical)
-df_cleaned["selling_price"] = pd.qcut(df_cleaned["selling_price"], 4, labels=["Grp 1", "Grp 2", "Grp 3", "Grp 4"])
-df_cleaned["selling_price"]
-
-# 5. Scale the values of numerical columns
+# 4. Scale the values of numerical columns
 scaler = StandardScaler()
 df_scaled = df_cleaned.copy()
 
-numeric_columns = ["km_driven", "mileage", "engine", "max_power", "seats"]
+numeric_columns = ["km_driven", "mileage", "engine", "max_power", "seats", "selling_price",]
 df_scaled[numeric_columns] = scaler.fit_transform(df_scaled[numeric_columns])
 
 #####################################################################################
-# 6. PCA Analysis
-pca_model = PCA(n_components=4)
+# 5. PCA Analysis
+pca_model = PCA(n_components=5)
 res = pca_model.fit_transform(df_scaled[numeric_columns])
 
 # Scree Plot data
@@ -56,13 +53,48 @@ scree_plot_data = {
 # Bi-plot data
 bi_plot_points = [[point[0], point[1]] for point in res.tolist()]
 bi_plot_pca_components = np.transpose(pca_model.components_[0:2, :]).tolist()
+
+for i in range(len(bi_plot_pca_components)):
+    curr_feature = bi_plot_pca_components[i]
+    curr_feature.append(np.sqrt(curr_feature[0]**2 + curr_feature[1]**2))
+    curr_feature.append(numeric_columns[i])
+
+bi_plot_pca_components.sort(key=lambda x: x[2], reverse=True)
 bi_plot_columns = numeric_columns.copy()
+bi_plot_pca_sorted = [{'attr_name': x[3], 'pc1_val': x[0], 'pc2_val': x[1], 'ssl' : x[2]} for x in bi_plot_pca_components]
 
 bi_plot_data = {
     'bi_plot_points': bi_plot_points,
-    'bi_plot_pca_components': bi_plot_pca_components,
-    'bi_plot_columns': bi_plot_columns
+    'bi_plot_pca_sorted': bi_plot_pca_sorted
 }
+
+# Scatter Plot Matrix Data
+scatter_plot_data = {
+    'bi_plot_pca_sorted': bi_plot_pca_sorted,
+    'scatter_data': df_cleaned.to_dict()
+}
+
+# Elbow Plot Data
+
+kmeans_kwargs = {
+    "init": "random",
+    "n_init": 10,
+    "random_state": 1,
+    "max_iter": 300,
+}
+
+# Create list to hold SSE values for each k
+sse_vs_clusters = []
+for k in range(1, 11):
+    kmeans = KMeans(n_clusters=k, **kmeans_kwargs)
+    kmeans.fit(df_scaled[numeric_columns])
+    sse_vs_clusters.append(kmeans.inertia_)
+
+elbow_plot_data = {
+    'sse_vs_clusters': sse_vs_clusters
+}
+
+print(elbow_plot_data)
 
 #####################################################################################
 
@@ -74,6 +106,14 @@ def get_scree_data():
 @app.get("/get_bi_plot_data")
 def get_bi_plot_data():
     return bi_plot_data
+
+@app.get("/get_scatter_data")
+def get_scatter_data():
+    return scatter_plot_data
+
+@app.get("/get_elbow_plot_data")
+def get_elbow_plot_data():
+    return elbow_plot_data
 
 if __name__ == "__main__":
     app.run(debug=True)

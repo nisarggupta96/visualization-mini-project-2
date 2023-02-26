@@ -110,7 +110,7 @@ export default function ScreePlot({ variance_ratio, cumulative_variance_ratio }:
     return (
         <Box>
             <Center>
-                <Heading>Scree Plot</Heading>
+                <Heading size={"md"}>Scree Plot</Heading>
             </Center>
             <svg style={{ margin: "auto", marginTop: "50px" }} ref={axisRef} width={width + 100} height={height}>
                 <g

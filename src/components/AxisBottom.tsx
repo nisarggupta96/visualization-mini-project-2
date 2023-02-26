@@ -6,6 +6,8 @@ type AxisBottomProps = {
     xScale: ScaleLinear<number, number>;
     pixelsPerTick: number;
     height: number;
+    xRotate?: number;
+    fontSize?: String;
 };
 
 // tick length
@@ -15,6 +17,8 @@ export const AxisBottom = ({
     xScale,
     pixelsPerTick,
     height,
+    xRotate = 0,
+    fontSize = FONT_SIZE.MEDIUM,
 }: AxisBottomProps) => {
     const range = xScale.range();
 
@@ -48,9 +52,9 @@ export const AxisBottom = ({
                         style={{
                             fontSize: "10px",
                             textAnchor: "middle",
-                            transform: "translateY(20px)",
+                            transform: `translateY(20px)rotate(${xRotate}deg)`,
                             fill: COLORS.TEXT_COLOR,
-                            fontSize: FONT_SIZE.MEDIUM
+                            fontSize: fontSize
                         }}
                     >
                         {value}

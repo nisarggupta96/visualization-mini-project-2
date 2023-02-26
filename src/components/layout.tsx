@@ -14,7 +14,8 @@ const Links = [
     { linkName: 'Scree Plot', linkHref: '/scree-plot' },
     { linkName: 'Bi-Plot', linkHref: '/bi-plot' },
     { linkName: 'Feature Table', linkHref: '/feature-table' },
-    { linkName: 'Scatter Plot', linkHref: '/scatter-plot' },
+    { linkName: 'Scatter Plot Matrix', linkHref: '/scatter-plot-matrix' },
+    { linkName: 'Elbow Plot', linkHref: '/elbow-plot' },
     { linkName: 'Clustering', linkHref: '/clustering' }
 ];
 

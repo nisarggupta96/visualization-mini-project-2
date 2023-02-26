@@ -14,12 +14,12 @@ import {
     TableContainer,
 } from '@chakra-ui/react';
 
-export default function FeatureTable({ bi_plot_pca_components, bi_plot_columns }: { bi_plot_pca_components: Number[], bi_plot_columns: String[] }) {
+export default function FeatureTable({ bi_plot_pca_sorted }: { bi_plot_pca_sorted: Object[] }) {
 
     return (
         <Box>
             <Center>
-                <Heading>Feature Table</Heading>
+                <Heading size={"md"}>Feature Table</Heading>
             </Center>
             <TableContainer>
                 <Table m={"auto"} mt={"100px"} width="50%" variant='simple'>
@@ -32,12 +32,12 @@ export default function FeatureTable({ bi_plot_pca_components, bi_plot_columns }
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {bi_plot_pca_components.map((row, index) => (
+                        {bi_plot_pca_sorted.map((row, index) => (
                             <Tr key={index}>
-                                <Td>{bi_plot_columns[index]}</Td>
-                                <Td isNumeric>{row[0].toFixed(6)}</Td>
-                                <Td isNumeric>{row[1].toFixed(6)}</Td>
-                                <Td isNumeric>{Math.sqrt(Math.pow(row[0], 2) + Math.pow(row[1], 2)).toFixed(6)}</Td>
+                                <Td>{row.attr_name}</Td>
+                                <Td isNumeric>{+row.pc1_val.toFixed(6)}</Td>
+                                <Td isNumeric>{+row.pc2_val.toFixed(6)}</Td>
+                                <Td isNumeric>{+row.ssl.toFixed(6)}</Td>
                             </Tr>
                         ))}
                     </Tbody>
@@ -48,11 +48,10 @@ export default function FeatureTable({ bi_plot_pca_components, bi_plot_columns }
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-    const { bi_plot_pca_components, bi_plot_columns } = await (await axios.get(`${SERVER.hostname}:${SERVER.port}/get_bi_plot_data`)).data;
+    const { bi_plot_pca_sorted } = await (await axios.get(`${SERVER.hostname}:${SERVER.port}/get_bi_plot_data`)).data;
     return {
         props: {
-            bi_plot_pca_components: bi_plot_pca_components,
-            bi_plot_columns: bi_plot_columns
+            bi_plot_pca_sorted: bi_plot_pca_sorted,
         }
     }
 }

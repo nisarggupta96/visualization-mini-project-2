@@ -6,11 +6,12 @@ type AxisLeftProps = {
     yScale: ScaleLinear<number, number>;
     pixelsPerTick: number;
     width: number;
+    fontSize?: String;
 };
 
 const TICK_LENGTH = 10;
 
-export const AxisLeft = ({ yScale, pixelsPerTick, width }: AxisLeftProps) => {
+export const AxisLeft = ({ yScale, pixelsPerTick, width, fontSize = FONT_SIZE.MEDIUM }: AxisLeftProps) => {
     const range = yScale.range();
 
     const ticks = useMemo(() => {
@@ -37,15 +38,15 @@ export const AxisLeft = ({ yScale, pixelsPerTick, width }: AxisLeftProps) => {
                         x2={width + TICK_LENGTH}
                         stroke="#D2D7D3"
                         strokeWidth={0.5}
+                        shapeRendering={"crispEdges"}
                     />
                     <text
                         key={value}
                         style={{
-                            fontSize: "10px",
                             textAnchor: "middle",
                             transform: "translateX(-20px)",
                             fill: COLORS.TEXT_COLOR,
-                            fontSize: FONT_SIZE.MEDIUM
+                            fontSize: fontSize
                         }}
                     >
                         {value}

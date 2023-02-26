@@ -3,8 +3,8 @@ import { GetStaticProps } from 'next';
 import * as d3 from 'd3';
 import { COLORS, FONT_SIZE, SERVER } from '@/constants';
 import { Box, Center, Heading } from '@chakra-ui/react';
-import { AxisLeft } from './AxisLeft';
-import { AxisBottom } from './AxisBottom';
+import { AxisLeft } from '../../components/AxisLeft';
+import { AxisBottom } from '../../components/AxisBottom';
 
 const width = 1000;
 const height = 550;
@@ -13,7 +13,7 @@ const MARGIN = { top: 30, right: 30, bottom: 50, left: 50 };
 const boundsWidth = width - MARGIN.right - MARGIN.left;
 const boundsHeight = height - MARGIN.top - MARGIN.bottom;
 
-export default function BiPlot({ bi_plot_points, bi_plot_pca_components, bi_plot_columns }: { bi_plot_points: Number[], bi_plot_pca_components: Number[], bi_plot_columns: String[] }) {
+export default function BiPlot({ bi_plot_points, bi_plot_pca_sorted }: { bi_plot_points: Number[], bi_plot_pca_components: Number[], bi_plot_columns: String[] }) {
 
     const xMin = d3.min(bi_plot_points, (d: Number[]) => d[0]);
     const xMax = d3.max(bi_plot_points, (d: Number[]) => d[0]);
@@ -42,26 +42,26 @@ export default function BiPlot({ bi_plot_points, bi_plot_pca_components, bi_plot
         );
     });
 
-    const eigenLines = bi_plot_pca_components.map((d, i) => {
+    const eigenLines = bi_plot_pca_sorted.map((d, i) => {
         return (
             <g key={i}>
                 <line
                     key={i}
                     x1={xScale(0)}
                     y1={yScale(0)}
-                    x2={xScale(d[0] * xRange / 3)}
-                    y2={yScale(d[1] * yRange / 3)}
+                    x2={xScale(d['pc1_val'] * xRange / 3)}
+                    y2={yScale(d['pc2_val'] * yRange / 3)}
                     stroke={COLORS.LINE_COLOR}
                     strokeWidth={2}
                     shapeRendering={"crispEdges"}
                 />
                 <text
-                    x={xScale(d[0] * xRange / 3)}
-                    y={yScale(d[1] * yRange / 3)}
+                    x={xScale(d['pc1_val'] * xRange / 3)}
+                    y={yScale(d['pc2_val'] * yRange / 3)}
                     fill={COLORS.LINE_COLOR}
                     stroke={COLORS.LINE_COLOR}
                 >
-                    {bi_plot_columns[i]}
+                    {d['attr_name']}
                 </text>
             </g>
         );
@@ -70,7 +70,7 @@ export default function BiPlot({ bi_plot_points, bi_plot_pca_components, bi_plot
     return (
         <Box>
             <Center>
-                <Heading>Bi Plot</Heading>
+                <Heading size={"md"}>Bi Plot</Heading>
             </Center>
             <svg style={{ margin: "auto", marginTop: "20px" }} width={width} height={height}>
                 <g
@@ -118,12 +118,11 @@ export default function BiPlot({ bi_plot_points, bi_plot_pca_components, bi_plot
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-    const { bi_plot_points, bi_plot_pca_components, bi_plot_columns } = await (await axios.get(`${SERVER.hostname}:${SERVER.port}/get_bi_plot_data`)).data;
+    const { bi_plot_points, bi_plot_pca_sorted } = await (await axios.get(`${SERVER.hostname}:${SERVER.port}/get_bi_plot_data`)).data;
     return {
         props: {
             bi_plot_points: bi_plot_points,
-            bi_plot_pca_components: bi_plot_pca_components,
-            bi_plot_columns: bi_plot_columns
+            bi_plot_pca_sorted: bi_plot_pca_sorted,
         }
     }
 }
