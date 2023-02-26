@@ -1,6 +1,5 @@
 import Head from 'next/head';
 import NextLink from 'next/link';
-import { ReactNode } from 'react';
 import {
     Box,
     Flex,
@@ -11,6 +10,7 @@ import {
 } from '@chakra-ui/react';
 
 const Links = [
+    { linkName: 'Home', linkHref: '/' },
     { linkName: 'Scree Plot', linkHref: '/scree-plot' },
     { linkName: 'Bi-Plot', linkHref: '/bi-plot' },
     { linkName: 'Feature Table', linkHref: '/feature-table' },

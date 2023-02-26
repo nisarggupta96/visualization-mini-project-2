@@ -6,9 +6,9 @@ import { Box, Center, Heading } from '@chakra-ui/react';
 import { AxisLeft } from '../../components/AxisLeft';
 import { AxisBottom } from '../../components/AxisBottom';
 
-const width = 1000;
-const height = 550;
-const MARGIN = { top: 30, right: 30, bottom: 50, left: 50 };
+const width = 1200;
+const height = 600;
+const MARGIN = { top: 30, right: 50, bottom: 60, left: 50 };
 
 const boundsWidth = width - MARGIN.right - MARGIN.left;
 const boundsHeight = height - MARGIN.top - MARGIN.bottom;

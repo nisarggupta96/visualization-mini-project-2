@@ -94,7 +94,19 @@ elbow_plot_data = {
     'sse_vs_clusters': sse_vs_clusters
 }
 
-print(elbow_plot_data)
+# K-Means Clustering on PC1 and PC2
+kmeans_pca = KMeans(n_clusters = 4, init="k-means++", random_state = 6)
+kmeans_pca.fit(res)
+
+df_pca_kmeans = pd.concat([df_scaled.reset_index(drop=True), pd.DataFrame(res)], axis = 1)
+df_pca_kmeans.columns.values[-5:] = ['Component 1', 'Component 2', 'Component 3', 'Component 4', 'Component 5']
+df_pca_kmeans['Segment PCA'] = kmeans_pca.labels_
+
+df_selected_data = df_pca_kmeans[['Component 1', 'Component 2', 'Segment PCA']].to_dict()
+
+kmeans_pca_data =  {
+    'clustered_data': df_selected_data
+}
 
 #####################################################################################
 
@@ -114,6 +126,10 @@ def get_scatter_data():
 @app.get("/get_elbow_plot_data")
 def get_elbow_plot_data():
     return elbow_plot_data
+
+@app.get("/get_kmeans_pca_data")
+def get_kmeans_pca_data():
+    return kmeans_pca_data
 
 if __name__ == "__main__":
     app.run(debug=True)
