@@ -12,7 +12,7 @@ export const COLORS = {
     POINT_STROKE: "#F9CF64",
     TEXT_COLOR: "#000000",
     POINT_COLOR_SM: "#FF7070",
-    CLUSTER_BARS: "#E45B40",
+    CLUSTER_BARS: "#7A1F62",
 };
 
 export const FONT_SIZE = {

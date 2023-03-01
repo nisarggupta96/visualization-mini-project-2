@@ -156,7 +156,7 @@ export default function ScreePlot({
                         <Box position="relative" right={10} />
                         <SliderFilledTrack bg="tomato" />
                     </SliderTrack>
-                    <SliderThumb boxSize={5} />
+                    <SliderThumb boxSize={5} border={"1px solid tomato"} />
                 </Slider>
             </Center>
             <svg

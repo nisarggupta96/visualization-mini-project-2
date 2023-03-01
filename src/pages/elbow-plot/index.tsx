@@ -18,6 +18,7 @@ export default function ElbowPlot({
 }: {
     sse_vs_clusters: Object[];
 }) {
+    const SELECTED_K = 2; // number of clusters - 1 for index
     const len = sse_vs_clusters.length;
     const yMax = d3.max(sse_vs_clusters);
     const yScale = d3
@@ -48,17 +49,19 @@ export default function ElbowPlot({
         );
     });
 
-    // console.log(sse_vs_clusters);
-
     const slope = (sse_vs_clusters[len - 1] - sse_vs_clusters[0]) / (len - 1);
-    const intercept = sse_vs_clusters[0] - slope;
-    // console.log(slope, intercept);
+    const scaled_slope = slope / 1000;
+    const yIntercept = sse_vs_clusters[0] - slope;
+    const scaled_yIntercept = yIntercept / 1000;
 
     const perpendicularLines = sse_vs_clusters.map((d, i) => {
         const x2 =
-            (i + 1 - slope * intercept + slope * d) / (Math.pow(slope, 2) + 1);
-        const y2 = slope * x2 + intercept;
-        // console.log(x2, y2);
+            (i +
+                1 -
+                scaled_slope * scaled_yIntercept +
+                (scaled_slope * d) / 1000) /
+            (Math.pow(scaled_slope, 2) + 1);
+        const y2 = (scaled_slope * x2 + scaled_yIntercept) * 1000;
         return (
             <line
                 key={i}
@@ -66,9 +69,9 @@ export default function ElbowPlot({
                 y1={yScale(d)}
                 x2={xScale(x2)}
                 y2={yScale(y2)}
-                stroke={COLORS.LINE_COLOR}
-                strokeWidth={2}
-                opacity={0.2}
+                stroke={COLORS.CLUSTER_BARS}
+                opacity={i == SELECTED_K ? 0.3 : 0.15}
+                strokeWidth={i == SELECTED_K ? 3 : 2}
             />
         );
     });
@@ -84,7 +87,7 @@ export default function ElbowPlot({
                     width={barWidth - 5}
                     stroke={COLORS.BORDER_COLOR}
                     fill={COLORS.CLUSTER_BARS}
-                    fillOpacity={i == 2 ? 1 : 0.4}
+                    fillOpacity={i == SELECTED_K ? 1 : 0.4}
                     strokeWidth={1}
                     rx={1}
                 />
@@ -95,7 +98,7 @@ export default function ElbowPlot({
                     stroke={COLORS.CLUSTER_BARS}
                     alignmentBaseline="central"
                     fontSize={FONT_SIZE.MEDIUM}
-                    opacity={i == 2 ? 1 : 0.5}
+                    opacity={i == SELECTED_K ? 1 : 0.5}
                 >
                     {d.toFixed(2)}
                 </text>
@@ -212,6 +215,7 @@ export default function ElbowPlot({
                         stroke={COLORS.LINE_COLOR_SECONDARY}
                         strokeWidth={2}
                         shapeRendering={"crispEdges"}
+                        opacity={0.3}
                     />
                     {perpendicularLines}
                 </g>
