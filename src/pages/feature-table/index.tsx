@@ -1,6 +1,4 @@
-import axios from 'axios';
-import { GetStaticProps } from 'next';
-import { SERVER } from '@/constants';
+import axios from "axios";
 import {
     Box,
     Center,
@@ -12,46 +10,67 @@ import {
     Th,
     Td,
     TableContainer,
-} from '@chakra-ui/react';
+} from "@chakra-ui/react";
+import { useContext, useEffect, useState } from "react";
+import DIndexContext from "@/context/dindex";
 
-export default function FeatureTable({ bi_plot_pca_sorted }: { bi_plot_pca_sorted: Object[] }) {
+export default function FeatureTable() {
+    const [bi_plot_pca_sorted, set_bi_plot_pca_sorted] = useState([]);
+    const { currentDimensions } = useContext(DIndexContext);
+
+    useEffect(() => {
+        const getData = async () => {
+            const data = await (
+                await axios.get(`api/feature-table?di=${currentDimensions}`)
+            ).data;
+            set_bi_plot_pca_sorted(data);
+        };
+        getData();
+    }, [currentDimensions]);
 
     return (
-        <Box>
-            <Center>
-                <Heading size={"md"}>Feature Table</Heading>
-            </Center>
-            <TableContainer>
-                <Table m={"auto"} mt={"100px"} width="50%" variant='simple'>
-                    <Thead>
-                        <Tr>
-                            <Th>Attribute</Th>
-                            <Th isNumeric>PC1</Th>
-                            <Th isNumeric>PC2</Th>
-                            <Th isNumeric>Sum Squared Loading</Th>
-                        </Tr>
-                    </Thead>
-                    <Tbody>
-                        {bi_plot_pca_sorted.map((row, index) => (
-                            <Tr key={index}>
-                                <Td>{row.attr_name}</Td>
-                                <Td isNumeric>{+row.pc1_val.toFixed(6)}</Td>
-                                <Td isNumeric>{+row.pc2_val.toFixed(6)}</Td>
-                                <Td isNumeric>{+row.ssl.toFixed(6)}</Td>
+        bi_plot_pca_sorted && (
+            <Box>
+                <Center>
+                    <Heading size={"md"}>Feature Table</Heading>
+                </Center>
+                <TableContainer>
+                    <Table m={"auto"} mt={"100px"} width="50%" variant="simple">
+                        <Thead>
+                            <Tr>
+                                <Th>Attribute</Th>
+                                {Array.from({ length: currentDimensions }).map(
+                                    (v, i) => (
+                                        <Th isNumeric key={`th_${i}`}>{`PC${
+                                            i + 1
+                                        }`}</Th>
+                                    )
+                                )}
+                                <Th isNumeric>Sum Squared Loading</Th>
                             </Tr>
-                        ))}
-                    </Tbody>
-                </Table>
-            </TableContainer>
-        </Box>
-    )
-}
-
-export const getStaticProps: GetStaticProps = async () => {
-    const { bi_plot_pca_sorted } = await (await axios.get(`${SERVER.hostname}:${SERVER.port}/get_bi_plot_data`)).data;
-    return {
-        props: {
-            bi_plot_pca_sorted: bi_plot_pca_sorted,
-        }
-    }
+                        </Thead>
+                        <Tbody>
+                            {bi_plot_pca_sorted.map((row, index) => (
+                                <Tr key={index}>
+                                    <Td>{row.attr_name}</Td>
+                                    {Array.from({
+                                        length: currentDimensions,
+                                    }).map((v, i) => (
+                                        <Td isNumeric key={`td_${i}`}>
+                                            {
+                                                +row[
+                                                    `pca_component_${i + 1}`
+                                                ].toFixed(6)
+                                            }
+                                        </Td>
+                                    ))}
+                                    <Td isNumeric>{+row.ssl.toFixed(6)}</Td>
+                                </Tr>
+                            ))}
+                        </Tbody>
+                    </Table>
+                </TableContainer>
+            </Box>
+        )
+    );
 }

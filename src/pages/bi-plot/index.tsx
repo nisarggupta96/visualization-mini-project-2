@@ -1,10 +1,10 @@
-import axios from 'axios';
-import { GetStaticProps } from 'next';
-import * as d3 from 'd3';
-import { COLORS, FONT_SIZE, SERVER } from '@/constants';
-import { Box, Center, Heading } from '@chakra-ui/react';
-import { AxisLeft } from '../../components/AxisLeft';
-import { AxisBottom } from '../../components/AxisBottom';
+import axios from "axios";
+import { GetStaticProps } from "next";
+import * as d3 from "d3";
+import { COLORS, FONT_SIZE, SERVER } from "@/constants";
+import { Box, Center, Heading } from "@chakra-ui/react";
+import { AxisLeft } from "../../components/AxisLeft";
+import { AxisBottom } from "../../components/AxisBottom";
 
 const width = 1200;
 const height = 600;
@@ -13,8 +13,13 @@ const MARGIN = { top: 30, right: 50, bottom: 60, left: 50 };
 const boundsWidth = width - MARGIN.right - MARGIN.left;
 const boundsHeight = height - MARGIN.top - MARGIN.bottom;
 
-export default function BiPlot({ bi_plot_points, bi_plot_pca_sorted }: { bi_plot_points: Number[], bi_plot_pca_components: Number[], bi_plot_columns: String[] }) {
-
+export default function BiPlot({
+    bi_plot_points,
+    bi_plot_pca_sorted,
+}: {
+    bi_plot_points: Number[];
+    bi_plot_pca_sorted: Object[];
+}) {
     const xMin = d3.min(bi_plot_points, (d: Number[]) => d[0]);
     const xMax = d3.max(bi_plot_points, (d: Number[]) => d[0]);
 
@@ -24,8 +29,14 @@ export default function BiPlot({ bi_plot_points, bi_plot_pca_sorted }: { bi_plot
     const xRange = xMax - xMin;
     const yRange = yMax - yMin;
 
-    const yScale = d3.scaleLinear().domain([yMin, yMax]).range([boundsHeight, 0]);
-    const xScale = d3.scaleLinear().domain([xMin, xMax]).range([0, boundsWidth]);
+    const yScale = d3
+        .scaleLinear()
+        .domain([yMin, yMax])
+        .range([boundsHeight, 0]);
+    const xScale = d3
+        .scaleLinear()
+        .domain([xMin, xMax])
+        .range([0, boundsWidth]);
     const allShapes = bi_plot_points.map((d, i) => {
         return (
             <circle
@@ -49,19 +60,19 @@ export default function BiPlot({ bi_plot_points, bi_plot_pca_sorted }: { bi_plot
                     key={i}
                     x1={xScale(0)}
                     y1={yScale(0)}
-                    x2={xScale(d['pc1_val'] * xRange / 3)}
-                    y2={yScale(d['pc2_val'] * yRange / 3)}
+                    x2={xScale((d["pca_component_1"] * xRange) / 3)}
+                    y2={yScale((d["pca_component_2"] * yRange) / 3)}
                     stroke={COLORS.LINE_COLOR}
                     strokeWidth={2}
                     shapeRendering={"crispEdges"}
                 />
                 <text
-                    x={xScale(d['pc1_val'] * xRange / 3)}
-                    y={yScale(d['pc2_val'] * yRange / 3)}
+                    x={xScale((d["pca_component_1"] * xRange) / 3)}
+                    y={yScale((d["pca_component_2"] * yRange) / 3)}
                     fill={COLORS.LINE_COLOR}
                     stroke={COLORS.LINE_COLOR}
                 >
-                    {d['attr_name']}
+                    {d["attr_name"]}
                 </text>
             </g>
         );
@@ -72,16 +83,29 @@ export default function BiPlot({ bi_plot_points, bi_plot_pca_sorted }: { bi_plot
             <Center>
                 <Heading size={"md"}>Bi Plot</Heading>
             </Center>
-            <svg style={{ margin: "auto", marginTop: "20px" }} width={width} height={height}>
+            <svg
+                style={{ margin: "auto", marginTop: "20px" }}
+                width={width}
+                height={height}
+            >
                 <g
                     width={boundsWidth}
                     height={boundsHeight}
-                    transform={`translate(${[MARGIN.left, MARGIN.top].join(",")})`}
+                    transform={`translate(${[MARGIN.left, MARGIN.top].join(
+                        ","
+                    )})`}
                     shapeRendering={"crispEdges"}
                 >
-                    <AxisLeft yScale={yScale} pixelsPerTick={40} width={boundsWidth} />
+                    <AxisLeft
+                        yScale={yScale}
+                        pixelsPerTick={40}
+                        width={boundsWidth}
+                    />
 
-                    <g transform={`translate(0, ${boundsHeight})`} shapeRendering={"crispEdges"}>
+                    <g
+                        transform={`translate(0, ${boundsHeight})`}
+                        shapeRendering={"crispEdges"}
+                    >
                         <AxisBottom
                             xScale={xScale}
                             pixelsPerTick={40}
@@ -114,15 +138,17 @@ export default function BiPlot({ bi_plot_points, bi_plot_pca_sorted }: { bi_plot
                 </text>
             </svg>
         </Box>
-    )
+    );
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-    const { bi_plot_points, bi_plot_pca_sorted } = await (await axios.get(`${SERVER.hostname}:${SERVER.port}/get_bi_plot_data`)).data;
+    const { bi_plot_points, bi_plot_pca_sorted } = await (
+        await axios.get(`${SERVER.hostname}:${SERVER.port}/get_bi_plot_data`)
+    ).data;
     return {
         props: {
             bi_plot_points: bi_plot_points,
             bi_plot_pca_sorted: bi_plot_pca_sorted,
-        }
-    }
-}
+        },
+    };
+};

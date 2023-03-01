@@ -23,7 +23,7 @@ export default function ClusterPlot({ clustered_data }: { clustered_data: Object
     const xScale = d3.scaleLinear().domain([xMin, xMax]).range([0, boundsWidth]);
     const yScale = d3.scaleLinear().domain([yMin, yMax]).range([boundsHeight, 0]);
 
-    const colorScale = d3.scaleOrdinal(d3.schemeSet1).domain([0,1,2,3]);
+    const colorScale = d3.scaleOrdinal(d3.schemeSet1).domain([0,1,2]);
 
     const pointsData = Object.keys(clustered_data["Component 1"]).map((d, i) => {
         return (
