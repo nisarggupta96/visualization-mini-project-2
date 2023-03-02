@@ -201,7 +201,7 @@ export default function ElbowPlot({
                     <path
                         fill="None"
                         stroke={COLORS.LINE_COLOR}
-                        strokeWidth={2}
+                        strokeWidth={3}
                         d={lineData}
                         shapeRendering={"crispEdges"}
                     />

@@ -10,9 +10,10 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import DIndexContext from "@/context/dindex";
+import { useRouter } from "next/router";
 
 const Links = [
-    { linkName: "Home", linkHref: "/" },
+    // { linkName: "Home", linkHref: "/" },
     { linkName: "Scree Plot", linkHref: "/scree-plot" },
     { linkName: "Bi-Plot", linkHref: "/bi-plot" },
     { linkName: "PCA Loadings", linkHref: "/feature-table" },
@@ -24,9 +25,11 @@ const Links = [
 const NavLink = ({
     linkName,
     linkHref,
+    isActive,
 }: {
     linkName: string;
     linkHref: string;
+    isActive: boolean;
 }) => (
     <Link
         px={2}
@@ -38,6 +41,8 @@ const NavLink = ({
         }}
         as={NextLink}
         href={linkHref}
+        color={isActive ? "#2F2E61" : "black"}
+        fontWeight={isActive ? "bold" : "normal"}
     >
         {linkName}
     </Link>
@@ -45,7 +50,7 @@ const NavLink = ({
 
 export default function Layout({ children }) {
     const [dimenIndex, setDimenIndex] = useState(2);
-
+    const { pathname } = useRouter();
     return (
         <>
             <Head>
@@ -67,7 +72,7 @@ export default function Layout({ children }) {
                         justifyContent={"space-between"}
                     >
                         <HStack spacing={8} alignItems={"center"}>
-                            <Heading size={"md"}>Visualization</Heading>
+                            <Heading size={"md"}>Visualization II</Heading>
                             <HStack
                                 as={"nav"}
                                 spacing={4}
@@ -78,6 +83,7 @@ export default function Layout({ children }) {
                                         key={index}
                                         linkHref={linkHref}
                                         linkName={linkName}
+                                        isActive={pathname === linkHref}
                                     />
                                 ))}
                             </HStack>

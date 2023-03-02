@@ -13,7 +13,7 @@ df_raw = pd.read_csv('cars.csv')
 
 # 1. Drop categorical columns
 cols_to_drop = ["name", "torque", "fuel",
-                "seller_type", "transmission", "owner"]
+                "seller_type", "transmission", "owner", "year"]
 df_num = df_raw.drop(cols_to_drop, axis=1)
 
 # 2. Drop rows having null values, replace blank with 0
@@ -129,8 +129,8 @@ def compute_scatter_plot_data(dim_index=2):
 
 df_pca_kmeans = pd.concat(
     [df_scaled.reset_index(drop=True), pd.DataFrame(res)], axis=1)
-df_pca_kmeans.columns.values[-5:] = ['Component 1',
-                                     'Component 2', 'Component 3', 'Component 4', 'Component 5']
+df_pca_kmeans.columns.values[-6:] = ['Component 1',
+                                     'Component 2', 'Component 3', 'Component 4', 'Component 5', 'Component 6']
 df_pca_kmeans['Segment PCA'] = kmeans_pca.labels_
 
 df_selected_data = df_pca_kmeans[[

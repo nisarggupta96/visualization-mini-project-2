@@ -5,6 +5,7 @@ import * as d3 from "d3";
 import { ScatterPlot } from "@/components/ScatterPlot";
 import { useContext, useEffect, useState } from "react";
 import DIndexContext from "@/context/dindex";
+import Legend from "@/components/Legend";
 
 export default function ScatterPlotMatrix() {
     const [bi_plot_pca_sorted, set_bi_plot_pca_sorted] = useState([]);
@@ -55,7 +56,15 @@ export default function ScatterPlotMatrix() {
             <Center>
                 <Heading size={"md"}>Scatter Plot Matrix</Heading>
             </Center>
-            <Grid templateColumns="repeat(4, 1fr)" gap={5} mt={"20px"}>
+            <Box
+                display={"flex"}
+                justifyContent={"center"}
+                alignContent={"center"}
+                mt={"50px"}
+            >
+                <Legend num_components={3} />
+            </Box>
+            <Grid templateColumns="repeat(4, 1fr)" gap={5} mt={"50px"}>
                 {allPlots.map((plot, ind) => {
                     if (plot.xCol === plot.yCol) {
                         return (
