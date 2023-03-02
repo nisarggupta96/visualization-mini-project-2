@@ -9,8 +9,8 @@ import {
     useColorModeValue,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import DIndexContext from "@/context/dindex";
 import { useRouter } from "next/router";
+import DIndexContext from "@/context/dIndex";
 
 const Links = [
     // { linkName: "Home", linkHref: "/" },
