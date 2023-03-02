@@ -194,7 +194,7 @@ export default function ScreePlot({
                     fontSize={FONT_SIZE.MEDIUM}
                     transform="rotate(-90)"
                 >
-                    Explained Co-variance ratio
+                    Explained Variance ratio
                 </text>
                 <text
                     x={width}
@@ -205,7 +205,7 @@ export default function ScreePlot({
                     alignmentBaseline="central"
                     fontSize={FONT_SIZE.MEDIUM}
                 >
-                    Cumulative explained co-variance
+                    Cumulative explained variance
                 </text>
             </svg>
         </Box>

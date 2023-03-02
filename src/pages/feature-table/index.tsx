@@ -32,7 +32,7 @@ export default function FeatureTable() {
         bi_plot_pca_sorted && (
             <Box>
                 <Center>
-                    <Heading size={"md"}>Feature Table</Heading>
+                    <Heading size={"md"}>PCA Loadings</Heading>
                 </Center>
                 <TableContainer>
                     <Table m={"auto"} mt={"100px"} width="50%" variant="simple">
