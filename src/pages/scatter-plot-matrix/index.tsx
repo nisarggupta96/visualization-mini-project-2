@@ -4,7 +4,7 @@ import { GetStaticProps } from "next";
 import * as d3 from "d3";
 import { ScatterPlot } from "@/components/ScatterPlot";
 import { useContext, useEffect, useState } from "react";
-import DIndexContext from "@/context/dindex";
+import DIndexContext from "@/context/dIndex";
 import Legend from "@/components/Legend";
 import { SERVER } from "@/constants";
 

@@ -12,7 +12,7 @@ import {
     TableContainer,
 } from "@chakra-ui/react";
 import { useContext, useEffect, useState } from "react";
-import DIndexContext from "@/context/dindex";
+import DIndexContext from "@/context/dIndex";
 
 export default function FeatureTable() {
     const [bi_plot_pca_sorted, set_bi_plot_pca_sorted] = useState([]);

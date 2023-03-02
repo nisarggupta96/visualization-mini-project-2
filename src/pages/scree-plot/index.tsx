@@ -12,7 +12,7 @@ import {
     SliderThumb,
 } from "@chakra-ui/react";
 import { useContext, useEffect, useRef } from "react";
-import DIndexContext from "@/context/dindex";
+import DIndexContext from "@/context/dIndex";
 
 const width = 600;
 const height = 500;
