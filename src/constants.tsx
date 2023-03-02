@@ -1,6 +1,6 @@
 export const SERVER = {
-    hostname: "http://127.0.0.1",
-    port: 5000,
+    hostname: "http://nisargtest16.pythonanywhere.com",
+    port: 80,
 };
 
 export const COLORS = {

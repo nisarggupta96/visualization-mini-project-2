@@ -6,6 +6,7 @@ import { ScatterPlot } from "@/components/ScatterPlot";
 import { useContext, useEffect, useState } from "react";
 import DIndexContext from "@/context/dindex";
 import Legend from "@/components/Legend";
+import { SERVER } from "@/constants";
 
 export default function ScatterPlotMatrix() {
     const [bi_plot_pca_sorted, set_bi_plot_pca_sorted] = useState([]);
@@ -103,7 +104,7 @@ export default function ScatterPlotMatrix() {
 
 export const getStaticProps: GetStaticProps = async () => {
     const { bi_plot_pca_sorted, scatter_data } = await (
-        await axios.get("http://127.0.0.1:5000/get_scatter_data")
+        await axios.get(`${SERVER.hostname}:${SERVER.port}/get_scatter_data`)
     ).data;
     return {
         props: {
