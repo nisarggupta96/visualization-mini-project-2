@@ -55,6 +55,7 @@ export default function ScreePlot({
                     fillOpacity={i < currentDimensions ? 1 : 0.4}
                     strokeWidth={1}
                     rx={1}
+                    onClick={() => modifyDimensions(i + 1)}
                 />
                 <text
                     x={xScale(i + 1) + xScale.bandwidth() / 2 + 20}
@@ -146,7 +147,7 @@ export default function ScreePlot({
                 <Slider
                     ml={5}
                     w={"500px"}
-                    defaultValue={currentDimensions}
+                    value={currentDimensions}
                     min={1}
                     max={variance_ratio.length}
                     step={1}

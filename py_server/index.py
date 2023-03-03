@@ -108,7 +108,7 @@ elbow_plot_data = {
 
 # K-Means Clustering on PC1 and PC2
 kmeans_pca = KMeans(n_clusters=3, init="k-means++", random_state=6)
-kmeans_pca.fit(res)
+kmeans_pca.fit(df_scaled[numeric_columns])
 
 df_cleaned_grped = pd.concat(
     [df_cleaned.reset_index(drop=True), pd.DataFrame(res)], axis=1)

@@ -13,7 +13,7 @@ import { useRouter } from "next/router";
 import DIndexContext from "@/context/dIndex";
 
 const Links = [
-    // { linkName: "Home", linkHref: "/" },
+    { linkName: "Home", linkHref: "/" },
     { linkName: "Scree Plot", linkHref: "/scree-plot" },
     { linkName: "Bi-Plot", linkHref: "/bi-plot" },
     { linkName: "PCA Loadings", linkHref: "/feature-table" },
