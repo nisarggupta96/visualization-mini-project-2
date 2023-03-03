@@ -5,13 +5,13 @@ export default function Home() {
         <Box m={"auto"} mt={"60px"} w={"60%"}>
             <Box>
                 The Kaggle dataset on sold used cars in the period 1983-2020
-                contains information on over 370,000 used cars sold in the
-                United States. The dataset includes details on various features
-                of the cars, such as make, model, year, mileage, price, and
-                location of sale. This dataset is frequently used for analysis
-                and modeling tasks such as predicting the price of a used car
-                based on its features or identifying trends in the used car
-                market over time.
+                contains information on over 370,000 used cars sold. The dataset
+                includes details on various features of the cars, such as make,
+                model, year, mileage, price, number of seats, kilometer driven
+                in car etc. This dataset is frequently used for analysis and
+                modeling tasks such as predicting the price of a used car based
+                on its features or identifying trends in the used car market
+                over time.
             </Box>
             <Divider mt={"20px"} mb={"20px"} />
             Attributes
